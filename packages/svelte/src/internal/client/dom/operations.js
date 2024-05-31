@@ -35,7 +35,7 @@ export function init_operations() {
 	element_prototype.__e = undefined;
 
 	// @ts-expect-error
-	Text.prototype.__nodeValue = ' ';
+	Text.prototype.__data = ' ';
 
 	if (DEV) {
 		// @ts-expect-error
