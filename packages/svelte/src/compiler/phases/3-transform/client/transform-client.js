@@ -544,7 +544,6 @@ export function client_module(analysis, options) {
 	const state = {
 		analysis,
 		options,
-		ast_type: 'module',
 		scope: analysis.module.scope,
 		scopes: analysis.module.scopes,
 		hoisted: [b.import_all('$', 'svelte/internal/client')],

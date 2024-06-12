@@ -22,8 +22,6 @@ export interface ClientTransformState extends TransformState {
 
 	/** The $: calls, which will be ordered in the end */
 	readonly legacy_reactive_statements: Map<LabeledStatement, Statement>;
-
-	readonly ast_type: 'module' | 'template';
 }
 
 export type SourceLocation =

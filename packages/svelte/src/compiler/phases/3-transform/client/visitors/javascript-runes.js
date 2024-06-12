@@ -501,7 +501,7 @@ export const javascript_visitors_runes = {
 		const state = context.state;
 		if (
 			node.callee.type === 'ClassExpression' &&
-			can_hoist_inline_class_expression(node, state.ast_type, state.scope)
+			can_hoist_inline_class_expression(node, state.scope)
 		) {
 			const id = node.callee.id?.name || state.scope.generate('hoisted_inline_class');
 

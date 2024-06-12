@@ -411,12 +411,9 @@ export function transform_inspect_rune(node, context) {
 
 /**
  * @param {import("estree").NewExpression} node
- * @param {string} ast_type
  * @param {import("../scope.js").Scope} scope
  */
-export function can_hoist_inline_class_expression(node, ast_type, scope) {
-	const allowed_depth = ast_type === 'module' ? 0 : 1;
-
+export function can_hoist_inline_class_expression(node, scope) {
 	if (node.callee.type !== 'ClassExpression') {
 		return false;
 	}
@@ -430,7 +427,7 @@ export function can_hoist_inline_class_expression(node, ast_type, scope) {
 		return false;
 	}
 	// If the class is top level, do not bother inlining it.
-	if (scope.function_depth < allowed_depth) {
+	if (scope.function_depth === 0) {
 		return false;
 	}
 	const body = node.callee.body.body;
