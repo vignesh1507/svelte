@@ -28,6 +28,7 @@ import {
 import * as e from '../errors.js';
 import { derived } from './deriveds.js';
 import { proxy } from '../proxy.js';
+import { UNINITIALIZED } from '../../../constants.js';
 
 let inspect_effects = new Set();
 
@@ -55,7 +56,7 @@ export function source(v) {
  */
 export function source_link(get_value, reducer) {
 	var was_local = false;
-	var local_source = source(/** @type {V} */ (undefined));
+	var local_source = source(/** @type {V} */ (UNINITIALIZED));
 	/**
 	 * @type {Derived<V> | undefined}
 	 */
@@ -63,14 +64,15 @@ export function source_link(get_value, reducer) {
 
 	if (reducer !== undefined) {
 		reduced_value = derived(() => {
-			get_value();
-			return proxy(reducer(local_source.v));
+			var linked_value = get_value();
+			var local_value = local_source.v;
+			return proxy(reducer(local_value === UNINITIALIZED ? linked_value : local_value));
 		});
 	}
 
 	var linked_derived = derived(() => {
 		var local_value = /** @type {V} */ (get(local_source));
-		var linked_value = reduced_value === undefined ? get_value() : get(reduced_value);
+		var linked_value = reduced_value === undefined ? proxy(get_value()) : get(reduced_value);
 
 		if (was_local) {
 			was_local = false;
