@@ -49,15 +49,27 @@ export function source(v) {
 /**
  * @template V
  * @param {() => V} get_value
+ * @param {(value: V) => V} [reducer]
  * @returns {(value?: V) => V}
  */
-export function source_link(get_value) {
+export function source_link(get_value, reducer) {
 	var was_local = false;
 	var local_source = source(/** @type {V} */ (undefined));
+	/**
+	 * @type {Derived<V> | undefined}
+	 */
+	var reduced_value;
+
+	if (reducer !== undefined) {
+		reduced_value = derived(() => {
+			get_value();
+			return reducer(local_source.v);
+		})
+	}
 
 	var linked_derived = derived(() => {
 		var local_value = /** @type {V} */ (get(local_source));
-		var linked_value = get_value();
+		var linked_value = reduced_value === undefined ? get_value() : get(reduced_value);
 
 		if (was_local) {
 			was_local = false;
