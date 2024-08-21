@@ -66,7 +66,7 @@ export function source_link(get_value, onchange) {
 		reduced_value = derived(() => {
 			var linked_value = get_value();
 			if (local_source.v === UNINITIALIZED) {
-				local_source.v = linked_value;
+				return linked_value;
 			}
 			return proxy(onchange(local_source.v, linked_value));
 		});
