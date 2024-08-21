@@ -66,7 +66,7 @@ export function source_link(get_value, reducer) {
 		reduced_value = derived(() => {
 			var linked_value = get_value();
 			if (local_source.v === UNINITIALIZED) {
-				local_source.v = proxy(linked_value);
+				local_source.v = linked_value;
 			}
 			return proxy(reducer(local_source.v));
 		});
@@ -74,7 +74,7 @@ export function source_link(get_value, reducer) {
 
 	var linked_derived = derived(() => {
 		var local_value = /** @type {V} */ (get(local_source));
-		var linked_value = reduced_value === undefined ? proxy(get_value()) : get(reduced_value);
+		var linked_value = reduced_value === undefined ? get_value() : get(reduced_value);
 
 		if (was_local) {
 			was_local = false;
@@ -87,7 +87,7 @@ export function source_link(get_value, reducer) {
 	return function (/** @type {any} */ value) {
 		if (arguments.length > 0) {
 			was_local = true;
-			set(local_source, proxy(value));
+			set(local_source, value);
 			get(linked_derived);
 			return value;
 		}
