@@ -51,10 +51,10 @@ export function source(v) {
 /**
  * @template V
  * @param {() => V} get_value
- * @param {(value: V) => V} [reducer]
+ * @param {(prev: V, next: V) => V} [onchange]
  * @returns {(value?: V) => V}
  */
-export function source_link(get_value, reducer) {
+export function source_link(get_value, onchange) {
 	var was_local = false;
 	var local_source = source(/** @type {V} */ (UNINITIALIZED));
 	/**
@@ -62,13 +62,13 @@ export function source_link(get_value, reducer) {
 	 */
 	var reduced_value;
 
-	if (reducer !== undefined) {
+	if (onchange !== undefined) {
 		reduced_value = derived(() => {
 			var linked_value = get_value();
 			if (local_source.v === UNINITIALIZED) {
 				local_source.v = linked_value;
 			}
-			return proxy(reducer(local_source.v));
+			return proxy(onchange(local_source.v, linked_value));
 		});
 	}
 
