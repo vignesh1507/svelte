@@ -27,6 +27,7 @@ import {
 } from '../constants.js';
 import * as e from '../errors.js';
 import { derived } from './deriveds.js';
+import { proxy } from '../proxy.js';
 
 let inspect_effects = new Set();
 
@@ -63,8 +64,8 @@ export function source_link(get_value, reducer) {
 	if (reducer !== undefined) {
 		reduced_value = derived(() => {
 			get_value();
-			return reducer(local_source.v);
-		})
+			return proxy(reducer(local_source.v));
+		});
 	}
 
 	var linked_derived = derived(() => {
@@ -82,7 +83,7 @@ export function source_link(get_value, reducer) {
 	return function (/** @type {any} */ value) {
 		if (arguments.length > 0) {
 			was_local = true;
-			set(local_source, value);
+			set(local_source, proxy(value));
 			get(linked_derived);
 			return value;
 		}
