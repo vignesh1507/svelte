@@ -65,8 +65,10 @@ export function source_link(get_value, reducer) {
 	if (reducer !== undefined) {
 		reduced_value = derived(() => {
 			var linked_value = get_value();
-			var local_value = local_source.v;
-			return proxy(reducer(local_value === UNINITIALIZED ? linked_value : local_value));
+			if (local_source.v === UNINITIALIZED) {
+				local_source.v = proxy(linked_value);
+			}
+			return proxy(reducer(local_source.v));
 		});
 	}
 

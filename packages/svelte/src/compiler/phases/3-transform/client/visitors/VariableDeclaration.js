@@ -123,10 +123,7 @@ export function VariableDeclaration(node, context) {
 						context.state.scope.get(id.name)
 					);
 
-					if (
-						(rune === '$state' || rune === '$state.link') &&
-						should_proxy(value, context.state.scope)
-					) {
+					if (rune === '$state' && should_proxy(value, context.state.scope)) {
 						value = b.call('$.proxy', value);
 					}
 
