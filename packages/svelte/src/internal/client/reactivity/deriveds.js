@@ -9,12 +9,10 @@ import {
 	current_skip_reaction,
 	update_reaction,
 	destroy_effect_children,
-	increment_version,
-	get
+	increment_version
 } from '../runtime.js';
 import { equals, safe_equals } from './equality.js';
 import * as e from '../errors.js';
-import { set, source } from './sources.js';
 
 /**
  * @template V

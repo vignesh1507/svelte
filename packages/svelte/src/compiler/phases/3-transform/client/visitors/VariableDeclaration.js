@@ -166,8 +166,6 @@ export function VariableDeclaration(node, context) {
 
 			if (rune === '$derived' || rune === '$derived.by') {
 				if (declarator.id.type === 'Identifier') {
-					const binding = /** @type {Binding} */ (context.state.scope.get(declarator.id.name));
-
 					declarations.push(
 						b.declarator(
 							declarator.id,
