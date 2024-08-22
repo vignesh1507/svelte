@@ -45,7 +45,7 @@ export function BindDirective(node, context) {
 			e.bind_invalid_value(node.expression);
 		}
 
-		if (binding?.kind === 'derived') {
+		if (binding?.kind === 'derived' && !binding.reassigned) {
 			e.constant_binding(node.expression, 'derived state');
 		}
 

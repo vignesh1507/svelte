@@ -111,14 +111,22 @@ export function mutate(source, value) {
 	return value;
 }
 
+function push_this(self) {
+	self_stack.push(self)
+}
+
+function pop_this() {
+	self_stack.pop()
+}
+
 /**
  * @template V
  * @param {Source<V>} source
  * @param {V} value
  * @returns {V}
  */
-export function set(source, value) {
-	if (current_reaction !== null && is_runes() && (current_reaction.f & DERIVED) !== 0) {
+export function set(source, value, self) {
+	if (current_reaction !== null && is_runes() && (current_reaction.f & DERIVED) !== 0 && self_stack.at(-1) !== self) {
 		e.state_unsafe_mutation();
 	}
 
