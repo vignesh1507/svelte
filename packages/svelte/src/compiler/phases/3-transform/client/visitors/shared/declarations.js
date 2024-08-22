@@ -23,7 +23,7 @@ export function add_state_transformers(context) {
 			binding.kind === 'legacy_reactive'
 		) {
 			context.state.transform[name] = {
-				read: get_value,
+				read: binding.declaration_kind === 'var' ? (node) => b.call('$.safe_get', node) : get_value,
 				assign: (node, value) => {
 					let call = b.call('$.set', node, value);
 
@@ -47,13 +47,6 @@ export function add_state_transformers(context) {
 						node.operator === '--' && b.literal(-1)
 					);
 				}
-			};
-		}
-
-		if (binding.kind === 'linked_state') {
-			context.state.transform[name] = {
-				read: b.call,
-				assign: b.call
 			};
 		}
 	}

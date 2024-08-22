@@ -64,33 +64,6 @@ Only plain objects and arrays [are made deeply reactive](/#H4sIAAAAAAAAE42QwWrDM
 
 In non-runes mode, a `let` declaration is treated as reactive state if it is updated at some point. Unlike `$state(...)`, which works anywhere in your app, `let` only behaves this way at the top level of a component.
 
-## `$state.link`
-
-Linked state stays up to date with its input:
-
-```js
-let a = $state(0);
-let b = $state.link(a);
-
-a = 1;
-console.log(a, b); // 1, 1
-```
-
-You can temporarily _unlink_ state. It will be _relinked_ when the input value changes:
-
-```js
-let a = 1;
-let b = 1;
-// ---cut---
-b = 2; // unlink
-console.log(a, b); // 1, 2
-
-a = 3; // relink
-console.log(a, b); // 3, 3
-```
-
-As with `$state`, if `$state.link` is passed a plain object or array it will be made deeply reactive. If passed an existing state proxy it will be reused, meaning that mutating the linked state will mutate the original. To clone a state proxy, you can use [`$state.snapshot`](#$state-snapshot).
-
 ## `$state.raw`
 
 State declared with `$state.raw` cannot be mutated; it can only be _reassigned_. In other words, rather than assigning to a property of an object, or using an array method like `push`, replace the object or array altogether if you'd like to update it:
@@ -283,6 +256,21 @@ An effect only reruns when the object it reads changes, not when a property insi
 </button>
 
 <p>{state.value} doubled is {derived.value}</p>
+```
+
+An effect only depends on the values that it read the last time it ran. If `a` is true, changes to `b` will [not cause this effect to rerun](/#H4sIAAAAAAAAE3WQ0WrDMAxFf0U1hTow1vcsMfQ7lj3YjlxEXTvEymC4_vfFC6Ewtidxde8RkrJw5DGJ9j2LoO8oWnGZJvEi-GuqIn2iZ1x1istsa6dLdqaJ1RAG9sigoYdjYs0onfYJm7fdMX85q3dE59CylA30CnJtDWxjSNHjq49XeZqXEChcT9usLUAOpIbHA0yzM78oColGhDVofLS3neZSS6mqOz-XD51ZmGOAGKwne-vztk-956CL0kAJsi7decupf4l658EUZX4I8yTWt93jSI5wFC3PC5aP8g0Aje5DcQEAAA==):
+
+```ts
+let a = false;
+let b = false;
+// ---cut---
+$effect(() => {
+	console.log('running');
+
+	if (a || b) {
+		console.log('inside if block');
+	}
+});
 ```
 
 You can return a function from `$effect`, which will run immediately before the effect re-runs, and before it is destroyed ([demo](/#H4sIAAAAAAAAE42SzW6DMBCEX2Vl5RDaVCQ9JoDUY--9lUox9lKsGBvZC1GEePcaKPnpqSe86_m0M2t6ViqNnu0_e2Z4jWzP3pqGbRhdmrHwHWrCUHvbOjF2Ei-caijLTU4aCYRtDUEKK0-ccL2NDstNrbRWHoU10t8Eu-121gTVCssSBa3XEaQZ9GMrpziGj0p5OAccCgSHwmEgJZwrNNihg6MyhK7j-gii4uYb_YyGUZ5guQwzPdL7b_U4ZNSOvp9T2B3m1rB5cLx4zMkhtc7AHz7YVCVwEFzrgosTBMuNs52SKDegaPbvWnMH8AhUXaNUIY6-hHCldQhUIcyLCFlfAuHvkCKaYk8iYevGGgy2wyyJnpy9oLwG0sjdNe2yhGhJN32HsUzi2xOapNpl_bSLIYnDeeoVLZE1YI3QSpzSfo7-8J5PKbwOmdf2jC6JZyD7HxpPaMk93aHhF6utVKVCyfbkWhy-hh9Z3o_2nQIAAA==)).
