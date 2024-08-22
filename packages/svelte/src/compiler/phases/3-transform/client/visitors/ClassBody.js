@@ -149,22 +149,15 @@ export function ClassBody(node, context) {
 						);
 					}
 
-					if (field.kind === 'raw_state') {
+					if (
+						field.kind === 'raw_state' ||
+						field.kind === 'derived' ||
+						field.kind === 'derived_by'
+					) {
 						// set foo(value) { this.#foo = value; }
 						const value = b.id('value');
 						body.push(
 							b.method('set', definition.key, [value], [b.stmt(b.call('$.set', member, value))])
-						);
-					}
-
-					if (dev && (field.kind === 'derived' || field.kind === 'derived_by')) {
-						body.push(
-							b.method(
-								'set',
-								definition.key,
-								[b.id('_')],
-								[b.throw_error(`Cannot update a derived property ('${name}')`)]
-							)
 						);
 					}
 				}

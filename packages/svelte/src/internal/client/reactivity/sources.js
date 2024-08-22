@@ -78,11 +78,11 @@ export function mutate(source, value) {
 }
 
 function push_this(self) {
-	self_stack.push(self)
+	self_stack.push(self);
 }
 
 function pop_this() {
-	self_stack.pop()
+	self_stack.pop();
 }
 
 /**
@@ -92,7 +92,12 @@ function pop_this() {
  * @returns {V}
  */
 export function set(source, value, self) {
-	if (current_reaction !== null && is_runes() && (current_reaction.f & DERIVED) !== 0 && self_stack.at(-1) !== self) {
+	if (
+		current_reaction !== null &&
+		is_runes() &&
+		(current_reaction.f & DERIVED) !== 0 &&
+		self_stack.at(-1) !== self
+	) {
 		e.state_unsafe_mutation();
 	}
 

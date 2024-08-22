@@ -4,7 +4,11 @@
 /** @import { Scope } from '../../../scope' */
 /** @import { NodeLike } from '../../../../errors.js' */
 import * as e from '../../../../errors.js';
-import { extract_identifiers, is_binding_pattern_declaration, object } from '../../../../utils/ast.js';
+import {
+	extract_identifiers,
+	is_binding_pattern_declaration,
+	object
+} from '../../../../utils/ast.js';
 import * as w from '../../../../warnings.js';
 
 /**

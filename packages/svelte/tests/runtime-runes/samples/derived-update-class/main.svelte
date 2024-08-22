@@ -1,7 +1,7 @@
 <script>
 	class Instance {
 		a = $state(0);
-		b = $state.link(this.a);
+		b = $derived(this.a);
 	}
 	const instance = new Instance();
 </script>
