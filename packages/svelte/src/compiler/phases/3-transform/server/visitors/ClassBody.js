@@ -97,17 +97,6 @@ export function ClassBody(node, context) {
 
 					// get foo() { return this.#foo; }
 					body.push(b.method('get', definition.key, [], [b.return(b.call(member))]));
-
-					if (dev && (field.kind === 'derived' || field.kind === 'derived_by')) {
-						body.push(
-							b.method(
-								'set',
-								definition.key,
-								[b.id('_')],
-								[b.throw_error(`Cannot update a derived property ('${name}')`)]
-							)
-						);
-					}
 				}
 
 				continue;

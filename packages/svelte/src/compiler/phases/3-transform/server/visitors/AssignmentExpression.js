@@ -24,6 +24,23 @@ export function AssignmentExpression(node, context) {
 function build_assignment(operator, left, right, context) {
 	let object = left;
 
+	if (
+		context.state.analysis.runes &&
+		left.type === 'MemberExpression' &&
+		left.object.type === 'ThisExpression' &&
+		left.property.type === 'PrivateIdentifier'
+	) {
+		const field = context.state.private_derived.get(left.property.name);
+
+		if (field) {
+			return b.assignment(
+				operator,
+				left,
+				b.call('$.once', b.thunk(/** @type {Expression} */ (context.visit(right))))
+			);
+		}
+	}
+
 	while (object.type === 'MemberExpression') {
 		// @ts-expect-error
 		object = object.object;

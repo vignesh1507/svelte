@@ -46,7 +46,7 @@ function build_assignment(operator, left, right, context) {
 				if (should_proxy(value, context.state.scope)) {
 					transformed = true;
 					value =
-						private_state.kind === 'raw_state'
+						private_state.kind === 'raw_state' || private_state.kind === 'derived'
 							? value
 							: build_proxy_reassignment(value, private_state.id);
 				}

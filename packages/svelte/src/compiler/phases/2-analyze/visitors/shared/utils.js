@@ -51,12 +51,6 @@ export function validate_assignment(node, argument, state) {
 		property = object.property;
 		object = object.object;
 	}
-
-	if (object.type === 'ThisExpression' && property?.type === 'PrivateIdentifier') {
-		if (state.private_derived_state.includes(property.name)) {
-			e.constant_assignment(node, 'derived state');
-		}
-	}
 }
 
 /**

@@ -17,7 +17,6 @@ export interface AnalysisState {
 	expression: ExpressionMetadata | null;
 	/** The current {@render ...} tag, if any */
 	render_tag: null | RenderTag;
-	private_derived_state: string[];
 	function_depth: number;
 
 	// legacy stuff
