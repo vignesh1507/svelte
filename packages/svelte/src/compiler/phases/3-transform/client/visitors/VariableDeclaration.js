@@ -171,10 +171,7 @@ export function VariableDeclaration(node, context) {
 					declarations.push(
 						b.declarator(
 							declarator.id,
-							b.call(
-								binding.reassigned ? '$.derived_source' : '$.derived',
-								rune === '$derived.by' ? value : b.thunk(value)
-							)
+							b.call('$.derived', rune === '$derived.by' ? value : b.thunk(value))
 						)
 					);
 				} else {

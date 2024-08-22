@@ -93,7 +93,7 @@ export {
 	template_with_script,
 	text
 } from './dom/template.js';
-export { derived, derived_source, derived_safe_equal } from './reactivity/deriveds.js';
+export { derived, derived_safe_equal } from './reactivity/deriveds.js';
 export {
 	effect_tracking,
 	effect_root,
