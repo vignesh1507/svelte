@@ -50,6 +50,7 @@ export function build_getter(node, state) {
  * @param {PrivateIdentifier | string} proxy_reference
  */
 export function build_proxy_reassignment(value, proxy_reference) {
+	debugger
 	return dev
 		? b.call(
 				'$.proxy',
