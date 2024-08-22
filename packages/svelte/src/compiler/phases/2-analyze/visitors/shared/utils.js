@@ -4,7 +4,7 @@
 /** @import { Scope } from '../../../scope' */
 /** @import { NodeLike } from '../../../../errors.js' */
 import * as e from '../../../../errors.js';
-import { extract_identifiers, object } from '../../../../utils/ast.js';
+import { extract_identifiers, is_binding_pattern_declaration, object } from '../../../../utils/ast.js';
 import * as w from '../../../../warnings.js';
 
 /**
@@ -23,17 +23,8 @@ export function validate_assignment(node, argument, state) {
 				if (binding.declaration_kind === 'const') {
 					e.constant_assignment(node, 'constant derived state');
 				}
-				const binding_path = binding.references.find((r) => r.node === binding.node);
-
-				if (binding_path) {
-					let declarator_path = binding_path.path.findLast((n) => n.type === 'VariableDeclarator');
-					if (
-						declarator_path &&
-						(declarator_path.id.type === 'ObjectPattern' ||
-							declarator_path.id.type === 'ArrayPattern')
-					) {
-						e.constant_assignment(node, 'destructured derived state');
-					}
+				if (is_binding_pattern_declaration(binding)) {
+					e.constant_assignment(node, 'destructured derived state');
 				}
 			}
 

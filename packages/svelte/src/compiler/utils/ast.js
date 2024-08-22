@@ -21,6 +21,23 @@ export function object(expression) {
 }
 
 /**
+ * @param {import("#compiler").Binding} binding
+ * @returns {boolean}
+ */
+export function is_binding_pattern_declaration(binding) {
+	const binding_path = binding.references.find((r) => r.node === binding.node);
+
+	if (binding_path) {
+		let declarator_path = binding_path.path.findLast((n) => n.type === 'VariableDeclarator');
+
+		return (
+			declarator_path?.id.type === 'ObjectPattern' || declarator_path?.id.type === 'ArrayPattern'
+		);
+	}
+	return false;
+}
+
+/**
  * Returns true if the attribute contains a single static text node.
  * @param {Attribute} attribute
  * @returns {attribute is Attribute & { value: [Text] }}

@@ -2,6 +2,7 @@
 /** @import { Context } from '../types' */
 import {
 	extract_all_identifiers_from_expression,
+	is_binding_pattern_declaration,
 	is_text_attribute,
 	object
 } from '../../../utils/ast.js';
@@ -45,8 +46,13 @@ export function BindDirective(node, context) {
 			e.bind_invalid_value(node.expression);
 		}
 
-		if (binding?.kind === 'derived' && binding.declaration_kind === 'const') {
-			e.constant_binding(node.expression, 'derived state');
+		if (binding?.kind === 'derived') {
+			if (binding.declaration_kind === 'const') {
+				e.constant_binding(node.expression, 'constant derived state');
+			}
+			if (is_binding_pattern_declaration(binding)) {
+				e.constant_binding(node.expression, 'destructured derived state');
+			}
 		}
 
 		if (context.state.analysis.runes && binding?.kind === 'each') {
