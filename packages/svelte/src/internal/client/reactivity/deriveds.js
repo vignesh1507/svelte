@@ -9,10 +9,12 @@ import {
 	current_skip_reaction,
 	update_reaction,
 	destroy_effect_children,
-	increment_version
+	increment_version,
+	get
 } from '../runtime.js';
 import { equals, safe_equals } from './equality.js';
 import * as e from '../errors.js';
+import { set, source } from './sources.js';
 
 /**
  * @template V
@@ -48,6 +50,39 @@ export function derived(fn) {
 	}
 
 	return signal;
+}
+
+/**
+ * @template V
+ * @param {() => V} get_value
+ * @returns {(value?: V) => V}
+ */
+export function derived_source(get_value) {
+	var was_local = false;
+	var local_source = source(/** @type {V} */ (undefined));
+
+	var linked_derived = derived(() => {
+		var local_value = /** @type {V} */ (get(local_source));
+		var linked_value = get_value();
+
+		if (was_local) {
+			was_local = false;
+			return local_value;
+		}
+
+		return linked_value;
+	});
+
+	return function (/** @type {any} */ value) {
+		if (arguments.length > 0) {
+			was_local = true;
+			set(local_source, value);
+			get(linked_derived);
+			return value;
+		}
+
+		return (local_source.v = get(linked_derived));
+	};
 }
 
 /**

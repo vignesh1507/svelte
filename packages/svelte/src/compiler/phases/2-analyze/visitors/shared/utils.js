@@ -20,7 +20,21 @@ export function validate_assignment(node, argument, state) {
 
 		if (state.analysis.runes) {
 			if (binding?.kind === 'derived') {
-				e.constant_assignment(node, 'derived state');
+				if (binding.declaration_kind === 'const') {
+					e.constant_assignment(node, 'constant derived state');
+				}
+				const binding_path = binding.references.find((r) => r.node === binding.node);
+
+				if (binding_path) {
+					let declarator_path = binding_path.path.findLast((n) => n.type === 'VariableDeclarator');
+					if (
+						declarator_path &&
+						(declarator_path.id.type === 'ObjectPattern' ||
+							declarator_path.id.type === 'ArrayPattern')
+					) {
+						e.constant_assignment(node, 'destructured derived state');
+					}
+				}
 			}
 
 			if (binding?.kind === 'each') {

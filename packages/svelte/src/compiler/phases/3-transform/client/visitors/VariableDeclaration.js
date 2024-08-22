@@ -166,10 +166,15 @@ export function VariableDeclaration(node, context) {
 
 			if (rune === '$derived' || rune === '$derived.by') {
 				if (declarator.id.type === 'Identifier') {
+					const binding = /** @type {Binding} */ (context.state.scope.get(declarator.id.name));
+
 					declarations.push(
 						b.declarator(
 							declarator.id,
-							b.call('$.derived', rune === '$derived.by' ? value : b.thunk(value))
+							b.call(
+								binding.reassigned ? '$.derived_source' : '$.derived',
+								rune === '$derived.by' ? value : b.thunk(value)
+							)
 						)
 					);
 				} else {

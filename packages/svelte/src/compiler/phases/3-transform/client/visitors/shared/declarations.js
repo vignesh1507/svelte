@@ -19,7 +19,7 @@ export function add_state_transformers(context) {
 	for (const [name, binding] of context.state.scope.declarations) {
 		if (
 			is_state_source(binding, context.state.analysis) ||
-			binding.kind === 'derived' ||
+			(binding.kind === 'derived' && !binding.reassigned) ||
 			binding.kind === 'legacy_reactive'
 		) {
 			context.state.transform[name] = {
@@ -50,7 +50,7 @@ export function add_state_transformers(context) {
 			};
 		}
 
-		if (binding.kind === 'linked_state') {
+		if (binding.kind === 'linked_state' || (binding.kind === 'derived' && binding.reassigned)) {
 			context.state.transform[name] = {
 				read: b.call,
 				assign: b.call
