@@ -36,6 +36,6 @@ polka()
 		res.writeHead(404);
 		res.end('not found');
 	})
-	.listen('3000');
+	.listen(3000);
 
 console.log('listening on http://localhost:3000');
